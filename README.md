@@ -1,5 +1,10 @@
-For both:      Cancel changes
+**This is a python project to generate or save seeds for Dome Keeper made by https://bippinbits.com/**
 
+Currently there are two independent files, one to just save every generated seed, another one to automatically generate seeds while afking. Produces about four seeds a minute :)
+
+Settings/Things to do:
+
+For both: 
 - Change the mode you are currently generating for sorting
 - Change the Paths according to your file System
 
