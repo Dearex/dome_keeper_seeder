@@ -11,9 +11,14 @@ For both:
 For the seed_copy.py:
 - Doesn't save the currently stored file
 
-For the auto Generator:
+For the Auto Generator:
 - You might also change Keybindings or the Speed modifier
+- On Windows you can use RUN_IN_BACKGROUND to generate the seeds without the potential to interrupt other windows and the ability to use your pc in the meantime. You can even minimize the window.
 
 
+
+Modules to install:
+pyautogui
+pywin32
 
 Use at own risk, suggestions are welcome!
