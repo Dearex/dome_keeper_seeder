@@ -25,7 +25,7 @@ DONTs:
 - Do any inputs into the window as they might mess up the expected state
 - Start in the main menu with any other than the most left button selected
 
-- It is untested if other languages than english have a map screen with different dimensions that might mess up modifier detection. Tested in english, if you find problems with other languages let me know!
+It is untested if other languages than english have a map screen with different dimensions that might mess up modifier detection. Tested in english, if you find problems with other languages let me know!
 
 If you only want to get the scn and encrypted json file you are ready to go. Just run the file, and follow instructions!
 
