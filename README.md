@@ -29,7 +29,7 @@ It is untested if other languages than english have a map screen with different 
 
 If you only want to get the scn and encrypted json file you are ready to go. Just run the file, and follow instructions!
 
-If you want to have the tscn, decrypted json and a png of the map:
+If you want to have the tscn, decrypted json, seed summary and a png of the map:
 1) Use GDRE Tools https://github.com/kimstars/godotRE to recover the domekeeper.exe to any folder you like
 2) Move both .gd files and a Godot.exe https://godotengine.org/download into this folder
 3) Set full path of the recovered projet as "conversion_folder" (use \\ as separator)
