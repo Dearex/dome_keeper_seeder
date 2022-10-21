@@ -17,7 +17,7 @@ Settings/Things to do:
 
 DOs:
 - You can resize the window at any time. It is recommended to resize it before starting generation
-- You can quit the generation by pressing CTRL + C at any time. Or just end the scipt
+- You can quit the generation by pressing CTRL + C at any time in the script window. Or just close/end the script
 - You can have the window in the background or on another virtual desktop. If it is minimized the script will automatially activate it.
 
 DONTs:
