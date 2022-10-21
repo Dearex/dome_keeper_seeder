@@ -37,8 +37,8 @@ If you want to have the tscn, decrypted json, seed summary and a png of the map:
  
 You are now ready to go! Just ingore all the Godot Errors.
 Seeds will be stored next to the Dome Keeper savegame folder as "Dome Keeper Seeds". Each setting has its own subfolder with naming:
-- First letter of difficulty
 - First letter of map size
+- First letter of difficulty
 - First letter of modifier if modifier is active
 
 
