@@ -1,24 +1,39 @@
 **This is a python project to generate or save seeds for Dome Keeper made by https://bippinbits.com/**
 
-Currently there are two independent files, one to just save every generated seed, another one to automatically generate seeds while afking. Produces about four seeds a minute :)
-
 Settings/Things to do:
+- Set desired seed in settings.json
+  - Difficulties:
+    - "normal"
+    - "hard" 
+    - "brutal"
+    - "YAFI"
+  - Map Sizes:
+    - "small"
+    - "medium" 
+    - "large"
+    - "huge"
+  - Modifiers: True/False
 
-For both: 
-- Change the mode you are currently generating for sorting
-- Change the Paths according to your file System
+If you only want to get the scn and encrypted json file you are ready to go.
 
-For the seed_copy.py:
-- Doesn't save the currently stored file
-
-For the Auto Generator:
-- You might also change Keybindings or the Speed modifier
-- On Windows you can use RUN_IN_BACKGROUND to generate the seeds without the potential to interrupt other windows and the ability to use your pc in the meantime. You can even minimize the window.
+If you want to have the tscn, decrypted json and a png of the map:
+1) Use GDRE Tools https://github.com/kimstars/godotRE to recover the domekeeper.exe to any folder you like
+2) Move both .gd files and a Godot.exe https://godotengine.org/download into this folder
+3) Set full path of the recovered projet as "conversion_folder" (use \\ as separator)
+4) Set "convert_savegame" to true
+ 
+You are now ready to go! Just ingore all the Godot Errors.
+Seeds will be stored next to the Dome Keeper savegame folder as "Dome Keeper Seeds". Each setting has its own subfolder with naming:
+First letter of difficulty
+Frst letter of map size
+first letter of modifier if modifier is active
 
 
 
 Modules to install:
-pyautogui
 pywin32
+PILLOW
+All other should be included in python by default
 
+Created for Dome Keeper version
 Use at own risk, suggestions are welcome!

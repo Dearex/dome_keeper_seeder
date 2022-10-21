@@ -1,0 +1,12 @@
+{
+    "difficulty": "normal",
+    "map_size": "small",
+    "modifiers": {
+        "quick_and_feeble": false,
+        "long_cycles": false,
+        "maze": false,
+        "double_iron": false
+    },
+    "convert_savegame": false,
+    "conversion_folder": "C:\\PATH\\TO\\CONVERTER"
+}
