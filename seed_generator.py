@@ -25,7 +25,7 @@ code_folder = os.path.split(code_folder)[0]
 os.chdir(code_folder)
 
 # LOAD SETTINGS
-settings = json.load("settings.json")
+settings = json.load(open("settings.json"))
 MAP_SIZE = settings["map_size"]
 DIFFICULTY = settings["difficulty"]
 QUICK_AND_FEEBLE = settings["modifiers"]["quick_and_feeble"]
@@ -290,6 +290,7 @@ class Game():
 
 
     def select_loadout(self):
+        # TODO: Implement maybe
         inputs = [
             KEY_UP,
             KEY_UP,
@@ -313,8 +314,9 @@ class Game():
         shutil.copy(self.source_json_path, CONVERSION_FOLDER)
         shutil.copy(self.source_map_path, CONVERSION_FOLDER)
         os.chdir(CONVERSION_FOLDER)
-        os.system('cmd /c "godot -s scn_to_tscn.gd" --no-window --quiet >> nul')
-        os.system('cmd /c "godot -s json_decrypt.gd" --no-window --quiet >> nul')
+        # TODO: Supress Code Errors
+        os.system('cmd /c "godot -s scn_to_tscn.gd --no-window --quiet"')
+        os.system('cmd /c "godot -s json_decrypt.gd --no-window --quiet"')
         shutil.move(os.path.join(CONVERSION_FOLDER, "savegame_0_decrypted.json"), self.current_decoded_save_json)
         shutil.move(os.path.join(CONVERSION_FOLDER, "savegame_0_map.tscn"), self.current_decoded_save_map)
         os.chdir(cwd)
@@ -327,22 +329,22 @@ class Game():
 
     # other helper functions
     # could be moved out of the class but more convenient here
-
-images = { # TODO: MOVE TO OTHER LOCATION
-    "iron": Image.open("Code/icons/iron.png"),
-    "cobalt": Image.open("Code/icons/cobalt.png"),
-    "water": Image.open("Code/icons/water.png"),
-    "rocks1": Image.open("Code/icons/rocks1.png"),
-    "rocks2": Image.open("Code/icons/rocks2.png"),
-    "rocks3": Image.open("Code/icons/rocks3.png"),
-    "rocks4": Image.open("Code/icons/rocks4.png"),
-    "rocks5": Image.open("Code/icons/rocks5.png"),
-    "rocks6": Image.open("Code/icons/rocks6.png"),
-    "gadget": Image.open("Code/icons/gadget.png"),
-    "relic": Image.open("Code/icons/relic.png"),
-}
-for image in images:
-    images[image] = images[image].convert("RGBA")
+if CONVERT_SAVEGAME:
+    images = { # TODO: MOVE TO OTHER LOCATIONr
+        "iron":   Image.open(os.path.join(CONVERSION_FOLDER, r"content\icons\icon_iron.png")),
+        "cobalt": Image.open(os.path.join(CONVERSION_FOLDER, r"content\icons\sand.png")),
+        "water":  Image.open(os.path.join(CONVERSION_FOLDER, r"content\icons\icon_water.png")),
+        "rocks1": Image.open(os.path.join(CONVERSION_FOLDER, r"content\map\tile\new_rocks\rocks1.png")),
+        "rocks2": Image.open(os.path.join(CONVERSION_FOLDER, r"content\map\tile\new_rocks\rocks2.png")),
+        "rocks3": Image.open(os.path.join(CONVERSION_FOLDER, r"content\map\tile\new_rocks\rocks3.png")),
+        "rocks4": Image.open(os.path.join(CONVERSION_FOLDER, r"content\map\tile\new_rocks\rocks4.png")),
+        "rocks5": Image.open(os.path.join(CONVERSION_FOLDER, r"content\map\tile\new_rocks\rocks5.png")),
+        "rocks6": Image.open(os.path.join(CONVERSION_FOLDER, r"content\map\tile\new_rocks\rocks6.png")),
+        "gadget": Image.open(os.path.join(CONVERSION_FOLDER, r"content\drop\gadget\gadget.png")),
+        "relic":  Image.open(os.path.join(CONVERSION_FOLDER, r"content\drop\relic\relic.png")),
+    }
+    for image in images:
+        images[image] = images[image].convert("RGBA")
 
 class seed():
 
@@ -484,6 +486,34 @@ class seed():
         print(f'Seed needs {hits} hits for all blocks with Tier 3 Drill')
         return hits
 
+    def ranking(self):
+        # All Blocks score
+        # Hits for all blocks needed
+        # hits = [self.tile_hits(*vector, 34) for vector in self.hardness]
+        # hits = sum(list(filter(lambda hit:hit!=9999, hits)))
+        # print(f'Seed needs {hits} hits for all blocks with Tier 3 Drill')
+        # return hits
+
+        # Relic Hunt Score
+        self.drill_1_hardness_map = {vector: self.tile_hits(*vector, 2) for vector, value in self.hardness.items()}
+        closest_iron = None
+        closest_iron_dist = 9999
+        for vector, value in self.resources.items():
+            if (current_dist:=self.tile_dist(*vector)) > 10:
+                continue
+            if value == 0:
+                if 0 in self.neighbour_tiles(self.resources, *vector):
+                    if current_dist < closest_iron_dist:
+                        closest_iron_dist = current_dist
+                        closest_iron = vector
+        self.lowest_hit_path((0, -2), closest_iron, 2)
+        
+                    
+
+
+
+
+        pass
 
     def visualize(self, seed_folder, current_folder):
         x_coords = [abs(tile[0]) for tile in self.biomes]
@@ -570,9 +600,15 @@ def main():
             cseed = seed(dome_game.current_decoded_save_json, dome_game.current_decoded_save_map)
             cseed.summary(dome_game.seed_folder, dome_game.current_folder)
             cseed.visualize(dome_game.seed_folder, dome_game.current_folder)
+            # cseed.ranking()
 
         print(f'Seed generated and saved as {dome_game.current_folder}')
         dome_game.next_seed()
+        pass
+
+
+
+
 
 
 
