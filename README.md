@@ -35,5 +35,5 @@ pywin32
 PILLOW
 All other should be included in python by default
 
-Created for Dome Keeper version
+Created for Dome Keeper version 41.5
 Use at own risk, suggestions are welcome!
