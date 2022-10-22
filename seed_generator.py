@@ -5,9 +5,11 @@ if system:=platform.system() != "Windows":
     exit()
 
 # Imports
+import copy
 import json
 import os
 import shutil
+import threading
 import time
 import webbrowser
 from ctypes import windll
@@ -58,7 +60,6 @@ KEY_RIGHT = 0x44
 KEY_ESCAPE = 0x1B
 
 ACTIVE_COLOR = (255, 227, 191)
-
 
 class Game():
 
@@ -185,7 +186,7 @@ class Game():
             self.press_key(KEY_RIGHT)
         self.press_key(KEY_CONFIRM)
 
-        time.sleep(2*PC_SPEED_MODIFIER)
+        time.sleep(1*PC_SPEED_MODIFIER)
 
         # Enter Map selection
         self.press_key(KEY_CONFIRM)
@@ -474,17 +475,17 @@ class seed():
                 seed_summary.append(f'{map_object["meta.name"]}: {map_object["coord"]}')
             if map_object["meta.kind"] == "cave":
                 seed_summary.append(f'{map_object["meta.name"]}: {map_object["coord"]}')
+        
+        # All Blocks infos
+        hits = [self.tile_hits(*vector, 34) for vector in self.hardness]
+        hits = sum(list(filter(lambda hit:hit!=9999, hits)))
+        seed_summary.append(f'')
+        seed_summary.append(f'Seed needs {hits} hits for all blocks with Tier 3 Drill')
 
         with open(os.path.join(seed_folder, str(current_folder), "summary.txt"), "w") as file:
             for line in seed_summary:
                 file.write(f'{line}\n')
 
-        pass 
-        # All Blocks infos
-        hits = [self.tile_hits(*vector, 34) for vector in self.hardness]
-        hits = sum(list(filter(lambda hit:hit!=9999, hits)))
-        print(f'Seed needs {hits} hits for all blocks with Tier 3 Drill')
-        return hits
 
     def ranking(self):
         # All Blocks score
@@ -567,6 +568,25 @@ class seed():
         image.save(os.path.join(seed_folder, str(current_folder), "map.png"))
     
 
+def generate_seed(dome_game):
+    dome_game.new_game(dome_game.save_file_exists())
+    time.sleep(1.5*PC_SPEED_MODIFIER)
+    dome_game.press_key(KEY_CONFIRM)
+    time.sleep(6.5*PC_SPEED_MODIFIER)
+    dome_game.quit_to_title()
+    dome_game.store_save()
+    print(f'Seed generated!')
+
+
+def analyse_seed(dome_game):
+    dome_game.convert_savefiles()
+    cseed = seed(dome_game.current_decoded_save_json, dome_game.current_decoded_save_map)
+    cseed.summary(dome_game.seed_folder, dome_game.current_folder)
+    cseed.visualize(dome_game.seed_folder, dome_game.current_folder)
+    # cseed.ranking()
+
+    print(f'Seed generated and saved as {dome_game.current_folder}')
+
 def main():
 
     # Initial Setup of the game
@@ -585,24 +605,28 @@ def main():
     else:
         time.sleep(5*PC_SPEED_MODIFIER)
 
-
+    generation: threading.Thread = False
+    converstion: threading.Thread = False
 
     # starting generation loop:
     while True:
-        dome_game.new_game(dome_game.save_file_exists())
-        time.sleep(1.5*PC_SPEED_MODIFIER)
-        dome_game.press_key(KEY_CONFIRM)
-        time.sleep(6.5*PC_SPEED_MODIFIER)
-        dome_game.quit_to_title()
-        dome_game.store_save()
+        if generation:
+            generation.join()
+            print("awaiting generation task before generation")
+        generation = threading.Thread(target=generate_seed, args=(dome_game, ))
+        generation.start()
+        print("started generation task")
+        if converstion:
+            converstion.join()
         if CONVERT_SAVEGAME:
-            dome_game.convert_savefiles()
-            cseed = seed(dome_game.current_decoded_save_json, dome_game.current_decoded_save_map)
-            cseed.summary(dome_game.seed_folder, dome_game.current_folder)
-            cseed.visualize(dome_game.seed_folder, dome_game.current_folder)
-            # cseed.ranking()
-
-        print(f'Seed generated and saved as {dome_game.current_folder}')
+            if generation:
+                print("awaiting generation task before conversion")
+                generation.join()
+            converstion = threading.Thread(target=analyse_seed, args=(copy.deepcopy(dome_game), ))
+            converstion.start()
+            print("started conversion task")
+        else:
+            print(f'Seed generated and saved as {dome_game.current_folder}')
         dome_game.next_seed()
         pass
 
