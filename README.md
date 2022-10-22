@@ -27,6 +27,8 @@ DONTs:
 
 It is untested if other languages than english have a map screen with different dimensions that might mess up modifier detection. Tested in english, if you find problems with other languages let me know!
 
+It is recommended to start steam manually. If steam is launched by the script exiting the script will close steam again.
+
 If you only want to get the scn and encrypted json file you are ready to go. Just run the file, and follow instructions!
 
 If you want to have the tscn, decrypted json, seed summary and a png of the map:
