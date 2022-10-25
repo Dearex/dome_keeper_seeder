@@ -46,8 +46,9 @@ Seeds will be stored next to the Dome Keeper savegame folder as "Dome Keeper See
 
 
 Modules to install:
-pywin32
-PILLOW
+- pywin32
+- Pillow
+- numpy
 All other should be included in python by default
 
 Created for Dome Keeper version 41.5
